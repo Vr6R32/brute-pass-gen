@@ -1,8 +1,14 @@
 package com.thebrute;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class CombinationGenerator {
 
+    private static final Logger logger = LoggerFactory.getLogger(CombinationGenerator.class);
     public static final double DIVISION_FOR_SECOND_DURATION = 1_000_000_000.0;
+    private String stringToFind = null;
     private static CombinationGenerator instance;
     private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private int minLength = 0;
@@ -25,6 +31,10 @@ public class CombinationGenerator {
         this.maxLength = maxLength;
     }
 
+    public void setCombinationToFind(String toFind){
+        this.stringToFind = toFind;
+    }
+
     public void generateCombinations() {
         long startTime = System.nanoTime();
 
@@ -38,8 +48,9 @@ public class CombinationGenerator {
         long endTime = System.nanoTime();
         long duration = endTime - startTime;
 
-        System.out.println("Total combinations tried: " + count);
-        System.out.println("Execution time: " + duration / DIVISION_FOR_SECOND_DURATION + " seconds");
+        logger.info("Total combinations tried: {}", count);
+        logger.info("Execution time: {} seconds", + duration / DIVISION_FOR_SECOND_DURATION);
+
     }
 
     private void generateCombinationsHelper(String currentString, int currentIndex, int targetLength) {
@@ -49,8 +60,8 @@ public class CombinationGenerator {
 
         if (currentIndex == targetLength) {
             count++;
-            if (currentString.equals("abcdef")) {
-                System.out.println(currentString);
+            if (currentString.equals(stringToFind)) {
+                logger.info("Generated phrase {}",currentString);
                 found = true;
             }
             return;
